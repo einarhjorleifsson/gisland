@@ -1,0 +1,18 @@
+Package: gisland2
+Type: Package
+Title: Map data with focus on Icelandic ecoregion
+Version: 0.0.01
+Date: 2017-04-01
+Author: Einar Hjorleifsson <einar.hjorleifsson@gmail.com>
+Maintainer: Einar Hjorleifsson <einar.hjorleifsson@gmail.com>
+Description: More about what it does (maybe more than one line). And then some.
+License: GPL-3
+LazyData: TRUE
+Depends:
+    R (>= 3.0.0)
+Imports:
+    magrittr
+Suggests:
+    knitr
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1
