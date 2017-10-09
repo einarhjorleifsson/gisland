@@ -11,7 +11,8 @@ LazyData: TRUE
 Depends:
     R (>= 3.0.0)
 Imports:
-    magrittr
+    magrittr,
+    sf
 Suggests:
     knitr
 VignetteBuilder: knitr
