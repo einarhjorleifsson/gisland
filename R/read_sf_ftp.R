@@ -13,6 +13,23 @@ read_sf_ftp <- function(dsn, shape_url = "ftp://ftp.hafro.is/pub/reiknid/einar/s
 
 }
 
+#' Read shapefile from ftp
+#'
+#' @param dsn The name of the shapefile (without extention)
+#' @param shape_url The ftp address
+#'
+#' @return a simple feature dataframe
+#' @export
+#'
+read_as_df_ftp <- function(dsn, shape_url = "ftp://ftp.hafro.is/pub/reiknid/einar/shapes") {
+
+  tmpdir <- gisland2:::download_shapefile(shape_url, dsn)
+  rgdal::readOGR(paste0(tmpdir, "/", dsn, ".shp")) %>%
+    ggplot2::fortify() %>%
+    as_tibble()
+
+}
+
 download_shapefile <- function(shape_url, layer, outfile=layer) {
   # source: https://landeco2point0.wordpress.com/2013/09/30/an-r-function-to-download-shapefiles/
 
