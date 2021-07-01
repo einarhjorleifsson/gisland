@@ -27,13 +27,13 @@
 geo_convert <- function (x, inverse = FALSE, na = FALSE)
 {
   if(!inverse) {
-  i <- sign(x)
-  x <- abs(x)
+    i <- sign(x)
+    x <- abs(x)
 
-  min <- (x/100) - trunc(x/10000) * 100
-  if(na) min <- ifelse(min > 60, NA, min)
+    min <- (x/100) - trunc(x/10000) * 100
+    if(na) min <- ifelse(min > 60, NA, min)
 
-  return((i * (x + (200/3) * min))/10000)
+    return((i * (x + (200/3) * min))/10000)
   } else {
     i <- sign(x)
     x <- abs(x)
@@ -58,7 +58,7 @@ geo_inside2 <- function(x, y, reg) {
   x.reg <- reg$lon
   y.reg <- reg$lat
 
-  border <- geo::adapt(y.reg, x.reg, projection = "none")
+  border <- adapt(y.reg, x.reg, projection = "none")
   tmpinside <- rep(0, length(border$lxv))
   inside <- rep(0, length(x))
   inside <- .C("geomarghc", PACKAGE = "geo", as.double(x),
@@ -125,4 +125,34 @@ geo_distance <- function(x1, y1, x2, y2, unit = "nmi") {
 
   return(ret)
 
+}
+
+#' Title
+#'
+#' @param reg.lat XXX
+#' @param reg.lon XXX
+#' @param projection XXX
+
+adapt <- function (reg.lat, reg.lon, projection = "Mercator") {
+  ind <- c(1:length(reg.lat))
+  nholes <- length(reg.lat[is.na(reg.lat)])
+  lxv <- c(0:(nholes + 1))
+  if (nholes != 0) {
+    ind1 <- ind[is.na(reg.lat)]
+    ind2 <- c(ind1 - 1, ind1, length(reg.lat))
+    lon <- reg.lon[-ind2]
+    lat <- reg.lat[-ind2]
+    for (i in 2:(nholes + 1)) {
+      lxv[i] <- ind1[i - 1] - 2 * (i - 1)
+    }
+  }
+  else {
+    ind <- (1:length(reg.lon) - 1)
+    lon <- reg.lon[ind]
+    lat <- reg.lat[ind]
+  }
+  lxv[nholes + 2] <- length(lon)
+  if (projection == "none")
+    return(list(x = lon, y = lat, lxv = lxv))
+  else return(list(lat = lat, lon = lon, lxv = lxv))
 }

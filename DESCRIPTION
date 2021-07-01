@@ -7,13 +7,16 @@ Author: Einar Hjorleifsson <einar.hjorleifsson@gmail.com>
 Maintainer: Einar Hjorleifsson <einar.hjorleifsson@gmail.com>
 Description: More about what it does (maybe more than one line). And then some.
 License: GPL-3
+Encoding: UTF-8
 LazyData: TRUE
 Depends:
     R (>= 3.0.0)
 Imports:
+    ggplot2,
     magrittr,
-    sf
+    sf,
+    stringr
 Suggests:
     knitr
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
