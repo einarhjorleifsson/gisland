@@ -14,7 +14,7 @@ read_sf_ftp <- function(name, url = "ftp://ftp.hafro.is/pub/data/shapes") {
 
 gl_grunnpunktar <- function() {
 
-  sf::read_sf("grunnpunktar")
+  read_sf_ftp("grunnpunktar")
 
 }
 
@@ -55,14 +55,17 @@ gl_eez <- function() {
 
 gl_vidmidunarpunktar <- function() {
 
-  sf::read_sf("vidmidunarpunktar")
+  read_sf_ftp("vidmidunarpunktar")
 
 }
 
 gl_vidmidunarlina <- function() {
 
   gl_vidmidunarpunktar() %>%
-    sf::st_cast("LINESTRING")
+    dplyr::summarise(do_union = FALSE) %>%
+    sf::st_cast("LINESTRING") %>%
+    dplyr::mutate(nafn = "viðmiðunarlína") %>%
+    dplyr::select(nafn)
 
 }
 
