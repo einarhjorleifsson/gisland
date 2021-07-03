@@ -2,9 +2,7 @@
 
 export(geo_convert)
 export(geo_distance)
-export(geo_inside2)
-export(geo_region)
+export(grade)
 export(pretty_coordinates)
-export(read_as_df_ftp)
 export(read_sf_ftp)
 importFrom(magrittr,"%>%")

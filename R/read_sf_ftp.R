@@ -1,80 +1,99 @@
 #' Read shapefile from ftp
 #'
-#' @param dsn The name of the shapefile (without extention)
-#' @param shape_url The ftp address
+#' @param name The name of the shapefile
+#' @param url The ftp directory
 #'
-#' @return a simple feature dataframe
+#' @return a sf-tibble
 #' @export
 #'
-read_sf_ftp <- function(dsn, shape_url = "ftp://ftp.hafro.is/pub/reiknid/einar/shapes") {
+read_sf_ftp <- function(name, url = "ftp://ftp.hafro.is/pub/data/shapes") {
 
-  tmpdir <- download_shapefile(shape_url, dsn)
-  sf::read_sf(paste0(tmpdir, "/", dsn, ".shp"))
+  sf::read_sf(paste0(url, "/", name, ".gpkg"))
 
 }
 
-#' Read shapefile from ftp
-#'
-#' @param dsn The name of the shapefile (without extention)
-#' @param shape_url The ftp address
-#'
-#' @return a simple feature dataframe
-#' @export
-#'
-read_as_df_ftp <- function(dsn, shape_url = "ftp://ftp.hafro.is/pub/reiknid/einar/shapes") {
+gl_grunnpunktar <- function() {
 
-  tmpdir <- gisland2:::download_shapefile(shape_url, dsn)
-  rgdal::readOGR(paste0(tmpdir, "/", dsn, ".shp")) %>%
-    ggplot2::fortify() %>%
-    as_tibble()
+  sf::read_sf("grunnpunktar")
 
 }
 
-download_shapefile <- function(shape_url, layer, outfile=layer) {
-  # source: https://landeco2point0.wordpress.com/2013/09/30/an-r-function-to-download-shapefiles/
+gl_grunnflaki <- function() {
 
-  #written by: jw hollister
-  #Oct 10, 2012
+  d <- gl_grunnpunktar()
 
-  #set-up/clean-up variables
-  if(length(grep("/$",shape_url))==0)
-  {
-    shape_url<-paste(shape_url,"/",sep="")
-  }
-  #creates vector of all possible shapefile extensions
-  shapefile_ext<-c(".shp",".shx",".dbf",".prj",".sbn",".sbx",
-                   ".shp.xml",".fbn",".fbx",".ain",".aih",".ixs",
-                   ".mxs",".atx",".cpg")
+  dplyr::bind_rows(d %>%
+                     # not sker because they are just points
+                     dplyr::filter(region %in% c("meginland", "grimsey")) %>%
+                     dplyr::group_by(region) %>%
+                     dplyr::summarise(do_union = FALSE) %>%
+                     sf::st_cast("LINESTRING") %>%
+                     sf::st_cast("POLYGON"),
+                   d %>%
+                     dplyr::filter(region %in% c("kolbeinsey", "hvalbakur")) %>%
+                     sf::st_transform(crs = 9040) %>%
+                     sf::st_buffer(dist = 200) %>%
+                     sf::st_transform(crs = 4326) %>%
+                     dplyr::select(region))
 
-  #Check which shapefile files exist
-  if(require(RCurl))
-  {
-    xurl<-getURL(shape_url)
-    xlogic<-NULL
-    for(i in paste(layer,shapefile_ext,sep=""))
-    {
-      xlogic<-c(xlogic,grepl(i,xurl))
-    }
+}
 
-    #Set-up list of shapefiles to download
-    shapefiles<-paste(shape_url,layer,shapefile_ext,sep="")[xlogic]
-    #Set-up output file names
-    outfiles<-paste(outfile,shapefile_ext,sep="")[xlogic]   }
+gl_grunnlina <- function() {
 
-  # temporary directory
-  tmpdir <- tempdir()
+  gl_grunnflaki() %>%
+    sf::st_cast("LINESTRING")
 
-  #Download all shapefiles
-  if(sum(xlogic)>0) {
-    for(i in 1:length(shapefiles))
-    {
-      download.file(shapefiles[i], paste0(tmpdir, "/", outfiles[i]),
-                    method="auto",mode="wb")
-    }
-  } else {
-    stop("An Error has occured with the input URL
-            or name of shapefile")
-  }
+}
 
-  return(tmpdir)
+gl_landhelgi <- function() {
+  read_sf_ftp("landhelgi")
+}
+
+gl_eez <- function() {
+  read_sf_ftp("eez_iceland")
+}
+
+gl_vidmidunarpunktar <- function() {
+
+  sf::read_sf("vidmidunarpunktar")
+
+}
+
+gl_vidmidunarlina <- function() {
+
+  gl_vidmidunarpunktar() %>%
+    sf::st_cast("LINESTRING")
+
+}
+
+gl_vidmidunarflaki <- function() {
+
+  gl_vidmidunarlina() %>%
+    sf::st_cast("POLYGON")
+
+}
+
+gl_bormicon <- function() {
+  read_sf_ftp("bormicon")
+}
+
+gl_fao_area <- function() {
+  read_sf_ftp("fao")
+}
+
+
+gl_ices_areas <- function() {
+  read_sf_ftp("ices_areas")
+}
+
+gl_ices_ecoregions <- function() {
+  read_sf_ftp("ices_ecoregions")
+}
+
+gl_ices_rectangles <- function() {
+  read_sf_ftp("ices_rectangles")
+}
+
+gl_ices_subrectangles <- function() {
+  read_sf_ftp("ices_subrectangles")
 }

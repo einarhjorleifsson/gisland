@@ -4,15 +4,15 @@
 \alias{read_sf_ftp}
 \title{Read shapefile from ftp}
 \usage{
-read_sf_ftp(dsn, shape_url = "ftp://ftp.hafro.is/pub/reiknid/einar/shapes")
+read_sf_ftp(name, url = "ftp://ftp.hafro.is/pub/data/shapes")
 }
 \arguments{
-\item{dsn}{The name of the shapefile (without extention)}
+\item{name}{The name of the shapefile}
 
-\item{shape_url}{The ftp address}
+\item{url}{The ftp directory}
 }
 \value{
-a simple feature dataframe
+a sf-tibble
 }
 \description{
 Read shapefile from ftp

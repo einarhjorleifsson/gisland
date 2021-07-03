@@ -51,9 +51,8 @@ geo_convert <- function (x, inverse = FALSE, na = FALSE)
 #' @param reg A data.frame contain column names lon, lat and Region.
 #'
 #' @return A vector of TRUE and FALSE
-#' @export
 #'
-geo_inside2 <- function(x, y, reg) {
+geo_inside <- function(x, y, reg) {
 
   x.reg <- reg$lon
   y.reg <- reg$lat
@@ -80,7 +79,6 @@ geo_inside2 <- function(x, y, reg) {
 #' the value/text to be returned.
 #'
 #' @return A vector of region names
-#' @export
 #'
 geo_region <- function(x, y, reg, region.name = "Region") {
   reg.name <- unique(reg[,region.name])
