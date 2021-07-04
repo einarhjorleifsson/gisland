@@ -12,15 +12,15 @@ read_sf_ftp <- function(name, url = "ftp://ftp.hafro.is/pub/data/shapes") {
 
 }
 
-gl_grunnpunktar <- function() {
+gl_get_grunnpunktar <- function() {
 
   read_sf_ftp("grunnpunktar")
 
 }
 
-gl_grunnflaki <- function() {
+gl_get_grunnflaki <- function() {
 
-  d <- gl_grunnpunktar()
+  d <- gl_get_grunnpunktar()
 
   dplyr::bind_rows(d %>%
                      # not sker because they are just points
@@ -38,30 +38,30 @@ gl_grunnflaki <- function() {
 
 }
 
-gl_grunnlina <- function() {
+gl_get_grunnlina <- function() {
 
-  gl_grunnflaki() %>%
+  gl_get_grunnflaki() %>%
     sf::st_cast("LINESTRING")
 
 }
 
-gl_landhelgi <- function() {
+gl_get_landhelgi <- function() {
   read_sf_ftp("landhelgi")
 }
 
-gl_eez <- function() {
+gl_get_eez <- function() {
   read_sf_ftp("eez_iceland")
 }
 
-gl_vidmidunarpunktar <- function() {
+gl_get_vidmidunarpunktar <- function() {
 
   read_sf_ftp("vidmidunarpunktar")
 
 }
 
-gl_vidmidunarlina <- function() {
+gl_get_vidmidunarlina <- function() {
 
-  gl_vidmidunarpunktar() %>%
+  gl_get_vidmidunarpunktar() %>%
     dplyr::summarise(do_union = FALSE) %>%
     sf::st_cast("LINESTRING") %>%
     dplyr::mutate(nafn = "viðmiðunarlína") %>%
@@ -69,34 +69,34 @@ gl_vidmidunarlina <- function() {
 
 }
 
-gl_vidmidunarflaki <- function() {
+gl_get_vidmidunarflaki <- function() {
 
-  gl_vidmidunarlina() %>%
+  gl_get_vidmidunarlina() %>%
     sf::st_cast("POLYGON")
 
 }
 
-gl_bormicon <- function() {
+gl_get_bormicon <- function() {
   read_sf_ftp("bormicon")
 }
 
-gl_fao_area <- function() {
+gl_get_fao_area <- function() {
   read_sf_ftp("fao")
 }
 
 
-gl_ices_areas <- function() {
+gl_get_ices_areas <- function() {
   read_sf_ftp("ices_areas")
 }
 
-gl_ices_ecoregions <- function() {
+gl_get_ices_ecoregions <- function() {
   read_sf_ftp("ices_ecoregions")
 }
 
-gl_ices_rectangles <- function() {
+gl_get_ices_rectangles <- function() {
   read_sf_ftp("ices_rectangles")
 }
 
-gl_ices_subrectangles <- function() {
+gl_get_ices_subrectangles <- function() {
   read_sf_ftp("ices_subrectangles")
 }
