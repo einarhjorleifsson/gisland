@@ -1,18 +1,30 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  warning = FALSE,
+  message = FALSE
+)
+```
 
 # gisland
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of gisland is to wrap some often used spatial related scripts
-into convenient functions.
+The goal of gisland is to wrap some often used spatial related scripts into convenient functions.
 
 ## Installation
 
-You can install the development version of gisland from
-[GitHub](https://github.com/) with:
+You can install the development version of gisland from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -23,15 +35,16 @@ devtools::install_github("einarhjorleifsson/gisland")
 
 This is a basic example which shows you how to solve a common problem:
 
-``` r
+```{r}
 library(sf)
 library(tidyverse)
 library(gisland)
 ```
 
+
 Get some object from LMÍ geoserver:
 
-``` r
+```{r}
 iceland <- read_strandlinur()
 glines <- read_grunnlinur()
 miles12 <- read_12miles()
@@ -39,20 +52,17 @@ miles12 <- read_12miles()
 
 What do we have?:
 
-``` r
+```{r  fig.height = 3, fig.width = 5}
 ggplot() +
   geom_sf(data = iceland) +
   geom_sf(data = glines, colour = "red") +
   geom_sf(data = miles12, colour = "blue")
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
-
 Could also do:
 
-``` r
+```{r}
 library(mapview)
 mapview(glines) + miles12
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />

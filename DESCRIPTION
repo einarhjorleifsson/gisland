@@ -17,6 +17,7 @@ Imports:
     httr,
     magrittr,
     ows4R,
+    purrr,
     sf,
     stringr
 Suggests:

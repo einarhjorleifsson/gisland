@@ -9,9 +9,16 @@
 read_lmi_features <- function() {
   wfs_lmi <- "https://gis.lmi.is/geoserver/wfs"
   lmi_client <- ows4R::WFSClient$new(wfs_lmi,
-                              serviceVersion = "2.0.0")
+                                     serviceVersion = "2.0.0")
   lmi_client$getFeatureTypes(pretty = TRUE) %>%
-    tibble::as_tibble()
+    tibble::as_tibble() %>%
+    dplyr::mutate(abstract = lmi_client$
+                    getCapabilities()$
+                    getFeatureTypes() %>%
+                    #map(function(x){x$getAbstract()})
+                    purrr::map_chr(function(x){x$getAbstract()})) %>%
+    dplyr::mutate(abstract = stringr::str_replace_all(abstract, "\r", ""),
+                  abstract = stringr::str_replace_all(abstract, "\n", " "))
 }
 
 
