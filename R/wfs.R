@@ -1,0 +1,102 @@
+# https://github.com/eblondel/ows4R
+# https://inbo.github.io/tutorials/tutorials/spatial_wfs_services
+
+read_lmi_features <- function() {
+  wfs_lmi <- "https://gis.lmi.is/geoserver/wfs"
+  lmi_client <- ows4R::WFSClient$new(wfs_lmi,
+                              serviceVersion = "2.0.0")
+  lmi_client$getFeatureTypes(pretty = TRUE) %>%
+    tibble::as_tibble()
+}
+
+
+# base
+lmi_connection <- function() {
+  wfs_lmi <- "https://gis.lmi.is/geoserver/wfs"
+  url <- httr::parse_url(wfs_lmi)
+}
+
+#' Get overview of objects
+#'
+#' @param The typname
+#' @return A tibble
+#' @export
+read_lmi <- function(typename) {
+  url <- lmi_connection()
+  url$query <- list(service = "wfs",
+                    #version = "2.0.0", # optional
+                    request = "GetFeature",
+                    typename = typename,
+                    srsName = "EPSG:4326"
+  )
+  url %>%
+    httr::build_url() %>%
+    sf::read_sf()
+}
+
+#' Get strandlínur
+#'
+#' @return An sf object
+#' @export
+#'
+read_strandlinur <- function() {
+  "IS_50V:strandlina_flakar" %>%
+    read_lmi() %>%
+    sf::st_cast(to = "GEOMETRYCOLLECTION") %>%
+    sf::st_collection_extract(type = "POLYGON")
+}
+
+#' Get grunnpunktar
+#'
+#' @return An sf object
+#' @export
+#'
+read_grunnpunktar <- function() {
+  "LHG:grunnlina_punktar" %>%
+    read_lmi()
+}
+
+#' Get grunnpunktar
+#'
+#' @return An sf object
+#' @export
+#'
+read_grunnlinur <- function() {
+  "LHG:grunnlina" %>%
+    read_lmi() %>%
+    sf::st_cast(to = "MULTILINESTRING")
+}
+
+#' Get 12 miles
+#'
+#' @return An sf object
+#' @export
+#'
+read_12miles <- function() {
+  "LHG:landhelgi_12_milur_lina" %>%
+    read_lmi() %>%
+    sf::st_cast(to = "MULTILINESTRING")
+}
+
+#' Get EEZ
+#'
+#' @return An sf object
+#' @export
+#'
+read_eez <- function() {
+  "LHG:efnahagslogsaga_lina" %>%
+    read_lmi() %>%
+    sf::st_cast(to = "MULTILINESTRING")
+}
+
+#' Get depth contours
+#'
+#' @return An sf object
+#' @export
+#'
+read_depth <- function() {
+  "LHG:dypislinur" %>%
+    read_lmi() %>%
+    sf::st_cast(to = "MULTILINESTRING")
+}
+
