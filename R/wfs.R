@@ -1,6 +1,11 @@
 # https://github.com/eblondel/ows4R
 # https://inbo.github.io/tutorials/tutorials/spatial_wfs_services
 
+#' Get overview of features
+#'
+#' @return A tibble
+#' @export
+#'
 read_lmi_features <- function() {
   wfs_lmi <- "https://gis.lmi.is/geoserver/wfs"
   lmi_client <- ows4R::WFSClient$new(wfs_lmi,
@@ -16,7 +21,7 @@ lmi_connection <- function() {
   url <- httr::parse_url(wfs_lmi)
 }
 
-#' Get overview of objects
+#' read object
 #'
 #' @param The typname
 #' @return A tibble
