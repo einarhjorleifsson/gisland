@@ -1,5 +1,5 @@
 ---
-title: "LMI"
+title: "Whats on the LMÍ menu"
 ---
 
 ```{r, include = FALSE}
@@ -22,11 +22,13 @@ What is on the menu?:
 
 ```{r}
 read_lmi_features() %>% 
-  select(-abstract) %>% 
-  knitr::kable()
+  #mutate(name = paste0(name, "    (", title, ")")) %>% 
+  select(-title) %>% 
+  kableExtra::kbl(full_width = F) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
 
-Lets get one itme:
+Lets get one dish:
 
 ```{r}
 gl <- 

@@ -7,7 +7,7 @@
 read_lmi(typename)
 }
 \arguments{
-\item{The}{typname}
+\item{typename}{The typname}
 }
 \value{
 A tibble

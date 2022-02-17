@@ -17,8 +17,9 @@ read_lmi_features <- function() {
                     getFeatureTypes() %>%
                     #map(function(x){x$getAbstract()})
                     purrr::map_chr(function(x){x$getAbstract()})) %>%
-    dplyr::mutate(abstract = stringr::str_replace_all(abstract, "\r", ""),
-                  abstract = stringr::str_replace_all(abstract, "\n", " "))
+    dplyr::mutate(abstract = stringr::str_replace_all(abstract, "\\\r", ""),
+                  abstract = stringr::str_replace_all(abstract, "\\\n", " ")) %>%
+    dplyr::arrange(name)
 }
 
 
@@ -30,7 +31,8 @@ lmi_connection <- function() {
 
 #' read object
 #'
-#' @param The typname
+#' @param typename The typname
+#'
 #' @return A tibble
 #' @export
 read_lmi <- function(typename) {

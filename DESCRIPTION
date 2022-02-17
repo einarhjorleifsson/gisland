@@ -19,7 +19,8 @@ Imports:
     ows4R,
     purrr,
     sf,
-    stringr
+    stringr,
+    tibble
 Suggests:
     knitr
 VignetteBuilder: knitr
