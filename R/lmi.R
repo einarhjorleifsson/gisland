@@ -17,5 +17,6 @@ gl_get_strandlinur <- function() {
   )
   request <- httr::build_url(url)
   sf::read_sf(request) %>%
-    sf::st_cast(to = "GEOMETRYCOLLECTION")
+    sf::st_cast(to = "GEOMETRYCOLLECTION") %>%
+    sf::st_collection_extract(type = "POLYGON")
 }
