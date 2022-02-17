@@ -2,6 +2,7 @@
 
 export(geo_convert)
 export(geo_distance)
+export(gl_get_strandlinur)
 export(grade)
 export(pretty_coordinates)
 export(read_sf_ftp)
