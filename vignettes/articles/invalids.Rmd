@@ -1,0 +1,158 @@
+---
+title: "Dealing with invalid geoms"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE,
+  collapse = TRUE,
+  error = TRUE,
+  comment = "#>"
+)
+```
+
+## Preamble
+
+One often gets unclean messy spatial lines or polygon data, even though simple features follow a standard, this sometimes resulting in problems with further pocessing downstream. This even in cases where the source is LMÍ.
+
+Here we show how one could possibly fix such cases. The libraries we use are:
+
+```{r}
+library(sf)
+library(lwgeom)
+library(tidyverse)
+library(gisland)
+```
+
+## Strandlínur
+
+Lets get the strandlínur from source:
+
+```{r}
+iceland <- 
+  gisland::read_strandlinur()
+glimpse(iceland)
+```
+
+We can obtain a plot of e.g. Breiðafjörður by:
+
+```{r}
+iceland %>% 
+  filter(eyjarsker == 1) %>% 
+  ggplot() +
+  theme_bw() +
+  geom_sf(fill = "white", alpha = 0.0, lwd = 0.1) +
+  coord_sf(xlim = c(-24.4, -21.6), ylim = c(64.9, 65.6)) +
+  scale_x_continuous(breaks = seq(-26, -20, by = 1)) +
+  scale_y_continuous(breaks = seq(63, 66, by = 0.5))
+```
+
+Now we may want to exclude scerries and the smaller islands from this plot. One could filter out skerries because that variable is in the dataframe:
+
+```{r}
+iceland %>% 
+  filter(eyjarsker == 1) %>% 
+  ggplot() +
+  theme_bw() +
+  geom_sf(fill = "white", alpha = 0.0, lwd = 0.1) +
+  coord_sf(xlim = c(-24.4, -21.6), ylim = c(64.9, 65.6)) +
+  scale_x_continuous(breaks = seq(-26, -20, by = 1)) +
+  scale_y_continuous(breaks = seq(63, 66, by = 0.5))
+```
+
+But what if we want to exclude certain islands below a certain size. Because that is not a variable in the dataframe from LMÍ we could calculate the are from within R:
+
+```{r, error = TRUE}
+iceland %>% 
+  mutate(area = st_area(.))
+```
+
+We get an error because some of the polygons are not strictly valid. Lets check how many of the objects are not valid:
+
+```{r}
+iceland %>% 
+  st_is_valid() %>% 
+  table()
+```
+
+Lets get the reason for them not being valid:
+
+```{r}
+# little helper functions, just get the "class" of the reason, not the details
+lh_reasons <- function(x) {
+  case_when(x == "Valid Geometry" ~ "valid",
+            str_detect(x, "degenerate") ~ "degenerate",
+            str_detect(x, "crosses edge") ~ "crosses edge",
+            str_detect(x, "duplicate vertex") ~ "duplicate vertex",
+            TRUE ~ NA_character_)
+}
+
+iceland %>% 
+  mutate(reason = st_is_valid(. , reason = TRUE),
+         reason = lh_reasons(reason)) %>% 
+  st_drop_geometry() %>% 
+  count(reason)
+```
+
+If you want to understand what "degenerate" means, check [this out](https://cs.stackexchange.com/questions/12521/what-are-degenerate-polygons).
+
+## Fixing invalid simple features
+
+Here we just want to try to fix things so that one can calculate the area. We could try to fix this by:
+
+```{r}
+iceland %>% 
+  st_make_valid() %>% 
+  mutate(reason = st_is_valid(., reason = TRUE),
+         reason = lh_reasons(reason)) %>% 
+  st_drop_geometry() %>% 
+  count(reason)
+```
+
+OK, so there as still a few invalids. Lets give it a one more go:
+
+```{r}
+iceland %>% 
+  st_make_valid() %>% 
+  mutate(geom = lwgeom_make_valid(geom)) %>% 
+  mutate(reason = st_is_valid(., reason = TRUE),
+         reason = lh_reasons(reason)) %>% 
+  st_drop_geometry() %>% 
+  count(reason)
+```
+
+Ok, so by this process all simple features are valid. Lets make the object "permanently" valid (and get rid of variables we do nt really need):
+
+```{r}
+iceland <- 
+  iceland %>% 
+  select(gml_id, eyjarsker) %>% 
+  st_make_valid() %>% 
+  mutate(geom = lwgeom_make_valid(geom))
+```
+
+Now we can calculate the area:
+
+```{r}
+iceland <- 
+  iceland %>% 
+  mutate(area = st_area(.)) %>% 
+  select(gml_id, eyjarsker, area)
+```
+
+Let's just retain the 50 largest islands and then plot Breiðafjörður:
+
+```{r}
+iceland %>% 
+  mutate(area = area / 1e6) %>% 
+  arrange(-area) %>% 
+  slice(1:50) %>% 
+  ggplot() +
+  theme_bw() +
+  geom_sf(fill = "white", alpha = 0.0, lwd = 0.1) +
+  coord_sf(xlim = c(-24.4, -21.6), ylim = c(64.9, 65.6)) +
+  scale_x_continuous(breaks = seq(-26, -20, by = 1)) +
+  scale_y_continuous(breaks = seq(63, 66, by = 0.5))
+```
+
