@@ -31,8 +31,9 @@ Lets get the strandlínur from source:
 
 ```{r}
 iceland <- 
-  gisland::read_strandlinur()
-glimpse(iceland)
+  gisland::read_strandlinur() %>% 
+  # we do not need most of the supplied variables
+  select(gml_id, eyjarsker)
 ```
 
 We can obtain a plot of e.g. Breiðafjörður by:
@@ -61,7 +62,7 @@ iceland %>%
   scale_y_continuous(breaks = seq(63, 66, by = 0.5))
 ```
 
-But what if we want to exclude certain islands below a certain size. Because that is not a variable in the dataframe from LMÍ we could calculate the are from within R:
+But what if we want to exclude certain islands below a certain area Because that is not a variable in the dataframe from LMÍ we could compute them:
 
 ```{r, error = TRUE}
 iceland %>% 
@@ -110,7 +111,7 @@ iceland %>%
   count(reason)
 ```
 
-OK, so there as still a few invalids. Lets give it a one more go:
+OK, so there as still a few invalids. Lets give it a one more go by trying the lwgeom_make_valid-function :
 
 ```{r}
 iceland %>% 
@@ -122,12 +123,11 @@ iceland %>%
   count(reason)
 ```
 
-Ok, so by this process all simple features are valid. Lets make the object "permanently" valid (and get rid of variables we do nt really need):
+Ok, so by this process all simple features are valid. Lets retain this object:
 
 ```{r}
 iceland <- 
-  iceland %>% 
-  select(gml_id, eyjarsker) %>% 
+  iceland %>%
   st_make_valid() %>% 
   mutate(geom = lwgeom_make_valid(geom))
 ```

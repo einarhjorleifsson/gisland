@@ -49,9 +49,16 @@ gl_get_landhelgi <- function() {
   read_sf_ftp("landhelgi")
 }
 
-gl_get_eez <- function() {
+gl_get_eez_iceland <- function() {
   read_sf_ftp("eez_iceland")
 }
+gl_get_eez_noshoreline <- function() {
+  read_sf_ftp("eez_no-shoreline")
+}
+gl_get_eez <- function() {
+  read_sf_ftp("eez")
+}
+
 
 gl_get_vidmidunarpunktar <- function() {
 
@@ -84,6 +91,10 @@ gl_get_fao_area <- function() {
   read_sf_ftp("fao")
 }
 
+gl_get_fao_area_full <- function() {
+  read_sf_ftp("FAO_AREAS_CWP_NOCOASTLINE")
+}
+
 
 gl_get_ices_areas <- function() {
   read_sf_ftp("ices_areas")
@@ -100,3 +111,5 @@ gl_get_ices_rectangles <- function() {
 gl_get_ices_subrectangles <- function() {
   read_sf_ftp("ices_subrectangles")
 }
+
+

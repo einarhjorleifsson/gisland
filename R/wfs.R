@@ -50,14 +50,20 @@ read_lmi <- function(typename) {
 
 #' Get strandlínur
 #'
+#' @param fix A boolean (default TRUE) to "fix" the shapefile
+#'
 #' @return An sf object
 #' @export
 #'
-read_strandlinur <- function() {
-  "IS_50V:strandlina_flakar" %>%
+read_strandlinur <- function(fix = TRUE) {
+  d <-
+    "IS_50V:strandlina_flakar" %>%
     read_lmi() %>%
     sf::st_cast(to = "GEOMETRYCOLLECTION") %>%
     sf::st_collection_extract(type = "POLYGON")
+  d %>%
+    sf::st_make_valid() %>%
+    dplyr::mutate(geom = lwgeom::lwgeom_make_valid(geom))
 }
 
 #' Get grunnpunktar

@@ -4,7 +4,10 @@
 \alias{read_strandlinur}
 \title{Get strandlínur}
 \usage{
-read_strandlinur()
+read_strandlinur(fix = TRUE)
+}
+\arguments{
+\item{fix}{A boolean (default TRUE) to "fix" the shapefile}
 }
 \value{
 An sf object
