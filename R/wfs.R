@@ -60,6 +60,7 @@ read_strandlinur <- function(fix = TRUE) {
     "IS_50V:strandlina_flakar" %>%
     read_lmi() %>%
     sf::st_cast(to = "GEOMETRYCOLLECTION") %>%
+    dplyr::filter(!sf::st_is_empty(.))
     sf::st_collection_extract(type = "POLYGON")
   d %>%
     sf::st_make_valid() %>%
