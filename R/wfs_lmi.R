@@ -1,7 +1,7 @@
 # https://github.com/eblondel/ows4R
 # https://inbo.github.io/tutorials/tutorials/spatial_wfs_services
 
-#' Get overview of features
+#' Get overview of LMI features
 #'
 #' @return A tibble
 #' @export
