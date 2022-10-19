@@ -12,6 +12,24 @@ read_sf_ftp <- function(name, url = "ftp://ftp.hafro.is/pub/data/shapes") {
 
 }
 
+#' Read Icelandic harbours
+#'
+#' @param trim Boolean(default TRUE) filters out some smaller harbours, cause a nuisance downstream
+#'
+#' @return a tibble with harbour polygons
+#' @export
+#'
+gl_read_is_harbours <- function(trim = TRUE) {
+
+  d <- read_sf_ftp("harbours")
+  if(trim) {
+    d <-
+      d |>
+      dplyr::filter(!hid %in% c("HRI", "ASS", "HAU", "GRE", "MJH", "MJO", "AED", "HJA"))
+  }
+  return(d)
+}
+
 gl_get_grunnpunktar <- function() {
 
   read_sf_ftp("grunnpunktar")

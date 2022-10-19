@@ -6,7 +6,7 @@
 #' @return A tibble
 #' @export
 #'
-read_lmi_features <- function() {
+gl_lmi_features <- function() {
   wfs_lmi <- "https://gis.lmi.is/geoserver/wfs"
   lmi_client <- ows4R::WFSClient$new(wfs_lmi,
                                      serviceVersion = "2.0.0")
@@ -22,6 +22,9 @@ read_lmi_features <- function() {
     dplyr::arrange(name)
 }
 
+
+#' @export
+read_lmi_features <- defunct("read_lmi_features changed name to gl_lmi_features")
 
 # base
 lmi_connection <- function() {

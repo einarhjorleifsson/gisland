@@ -2,6 +2,8 @@
 
 export(geo_convert)
 export(geo_distance)
+export(gl_lmi_features)
+export(gl_read_is_harbours)
 export(grade)
 export(pretty_coordinates)
 export(read_12miles)
