@@ -21,10 +21,9 @@ library(gisland)
 What is on the menu?:
 
 ```{r}
-read_lmi_features() %>% 
-  #mutate(name = paste0(name, "    (", title, ")")) %>% 
-  select(-title) %>% 
-  kableExtra::kbl(full_width = F) %>%
+gl_lmi_features() |> 
+  select(-title) |> 
+  kableExtra::kbl(full_width = F) |>
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
 
@@ -36,9 +35,9 @@ gl <-
 glimpse(gl)
 # MULTICURVE is an odd geom, thus ...
 gl <-
-  gl %>% 
+  gl |> 
   sf::st_cast("MULTILINESTRING")
-gl %>% 
+gl |> 
   ggplot() +
   geom_sf()
 ```
