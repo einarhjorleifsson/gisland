@@ -16,12 +16,12 @@ Imports:
     ggplot2,
     httr,
     magrittr,
-    ows4R,
     purrr,
     sf,
     stringr,
     tibble
 Suggests:
-    knitr
+    knitr,
+    ows4R
 VignetteBuilder: knitr
 RoxygenNote: 7.2.1
