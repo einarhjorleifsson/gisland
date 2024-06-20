@@ -14,10 +14,8 @@ into convenient functions.
 You can install the development version of gisland from
 [GitHub](https://github.com/) with:
 
-``` r
-# install.packages("devtools")
-devtools::install_github("einarhjorleifsson/gisland")
-```
+    # install.packages("devtools")
+    devtools::install_github("einarhjorleifsson/gisland")
 
 ## Example
 
@@ -54,5 +52,3 @@ Could also do:
 library(mapview)
 mapview(glines) + miles12
 ```
-
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />

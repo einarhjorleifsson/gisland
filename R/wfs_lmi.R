@@ -23,8 +23,6 @@ gl_lmi_features <- function() {
 }
 
 
-#' @export
-read_lmi_features <- defunct("read_lmi_features changed name to gl_lmi_features")
 
 # base
 lmi_connection <- function() {

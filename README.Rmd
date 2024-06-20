@@ -26,7 +26,7 @@ The goal of gisland is to wrap some often used spatial related scripts into conv
 
 You can install the development version of gisland from [GitHub](https://github.com/) with:
 
-``` r
+```
 # install.packages("devtools")
 devtools::install_github("einarhjorleifsson/gisland")
 ```
@@ -61,7 +61,7 @@ ggplot() +
 
 Could also do:
 
-```{r}
+```{r, eval = FALSE}
 library(mapview)
 mapview(glines) + miles12
 ```
