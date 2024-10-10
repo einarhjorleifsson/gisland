@@ -89,7 +89,7 @@ gl_get_vidmidunarlina <- function() {
   gl_get_vidmidunarpunktar() %>%
     dplyr::summarise(do_union = FALSE) %>%
     sf::st_cast("LINESTRING") %>%
-    dplyr::mutate(nafn = "viðmiðunarlína") %>%
+    dplyr::mutate(nafn = "vidmidunarlina") %>%
     dplyr::select(nafn)
 
 }

@@ -225,7 +225,7 @@ if(FALSE) {
   if(SAVE) {
     write_sf(hb.mfri, "/net/www/export/home/ftp/pub/data/shapes/harbours.gpkg")
     system("chmod a+rX /net/www/export/home/ftp/pub/data/shapes/harbours.gpkg")
-    harbours <- read_sf("ftp://ftp.hafro.is/pub/data/shapes/harbours.gpkg")
+    sf::harbours <- read_sf("ftp://ftp.hafro.is/pub/data/shapes/harbours.gpkg")
   }
 
 

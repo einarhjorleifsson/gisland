@@ -68,6 +68,40 @@ read_strandlinur <- function(fix = TRUE) {
     dplyr::mutate(geom = lwgeom::lwgeom_make_valid(geom))
 }
 
+
+# Safer way than read_shorline, at least wrt valid geometries
+read_shoreline <- function(mainland = TRUE) {
+  s <-
+    "IS_50V:strandlina_flakar" %>%
+    gisland::read_lmi()
+  tmp <- tempdir()
+  sf::write_sf(s, paste0(tmp, "/in.gpkg"))
+  cmd <-
+    paste0("ogr2ogr ",
+           tmp,
+           "/out.gpkg ",
+           tmp,
+           "/in.gpkg",
+           " -explodecollections -nlt CONVERT_TO_LINEAR")
+  system(cmd)
+  s <-
+    sf::read_sf(paste0(tmp, "/out.gpkg")) |>
+    dplyr::filter(!sf::st_is_empty(geom)) |>
+    #sf::st_collection_extract(type = "POLYGON")
+    sf::st_make_valid() |>
+    dplyr::mutate(geom = lwgeom::lwgeom_make_valid(geom)) |>
+    dplyr::mutate(area = sf::st_area(geom),
+           on_land = TRUE) |>
+    dplyr::select(area, on_land)
+  if(mainland) {
+    s <-
+      s |>
+      dplyr::filter(area == max(area)) |>
+      dplyr::select(on_land)
+  }
+  return(s)
+}
+
 #' Get grunnpunktar
 #'
 #' @return An sf object

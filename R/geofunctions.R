@@ -60,7 +60,7 @@ geo_inside <- function(x, y, reg) {
   border <- adapt(y.reg, x.reg, projection = "none")
   tmpinside <- rep(0, length(border$lxv))
   inside <- rep(0, length(x))
-  inside <- .C("geomarghc", PACKAGE = "geo", as.double(x),
+  inside <- .C("geomarghc", PACKAGE = "gisland", as.double(x),
                as.double(y), as.integer(length(y)), as.double(border$x),
                as.double(border$y), as.integer(border$lxv), as.integer(length(border$lxv)),
                as.integer(inside), as.integer(tmpinside))

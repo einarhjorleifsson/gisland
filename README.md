@@ -6,8 +6,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of gisland is to wrap some often used spatial related scripts
-into convenient functions.
+The goal of gisland is to wrap some often used MFRI spatial objects into
+convenient functions.
 
 ## Installation
 
@@ -15,7 +15,7 @@ You can install the development version of gisland from
 [GitHub](https://github.com/) with:
 
     # install.packages("devtools")
-    devtools::install_github("einarhjorleifsson/gisland")
+    remotes::install_github("einarhjorleifsson/gisland")
 
 ## Example
 
@@ -27,7 +27,7 @@ library(tidyverse)
 library(gisland)
 ```
 
-Get some object from LMÍ geoserver:
+Get some object from [LMÍ geoserver](https://gis.lmi.is/geoserver):
 
 ``` r
 iceland <- read_strandlinur()

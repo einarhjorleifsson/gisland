@@ -42,3 +42,16 @@ gl |>
   geom_sf()
 ```
 
+Or rivers
+
+```{r}
+#| eval: false
+library(mapview)
+rivers <- 
+  read_lmi("IS_50V:vatnafar_linur")
+rivers <-
+  rivers |> 
+  sf::st_cast("MULTILINESTRING")
+mapview(rivers)
+```
+
