@@ -30,9 +30,9 @@ library(gisland)
 Get some object from [LMÍ geoserver](https://gis.lmi.is/geoserver):
 
 ``` r
-iceland <- read_strandlinur()
-glines <- read_grunnlinur()
-miles12 <- read_12miles()
+iceland <- gl_lmi_strandlina()
+glines <- gl_lhg_grunnlina()
+miles12 <- gl_lhg_landhelgi()
 ```
 
 What do we have?:

@@ -1,4 +1,5 @@
-url: https://heima.hafro.is/~einarhj/gisland
+url: https://heima.hafro.is/~einarhj/pkg/gisland
 template:
+  bootstrap: 5
 
 

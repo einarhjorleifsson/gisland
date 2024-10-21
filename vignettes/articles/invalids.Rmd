@@ -31,7 +31,7 @@ Lets get the strandlínur from source:
 
 ```{r}
 iceland <- 
-  gisland::read_strandlinur() |> 
+  gl_lmi_strandlina(make_valid = FALSE) |> 
   # we do not need most of the supplied variables
   select(gml_id, eyjarsker)
 ```
@@ -66,7 +66,7 @@ But what if we want to exclude certain islands below a certain area Because that
 
 ```{r, error = TRUE}
 iceland |> 
-  mutate(area = st_area(.))
+  mutate(area = st_area(geom))
 ```
 
 We get an error because some of the polygons are not strictly valid. Lets check how many of the objects are not valid:
@@ -90,7 +90,7 @@ lh_reasons <- function(x) {
 }
 
 iceland |> 
-  mutate(reason = st_is_valid(. , reason = TRUE),
+  mutate(reason = st_is_valid(geom , reason = TRUE),
          reason = lh_reasons(reason)) |> 
   st_drop_geometry() |> 
   count(reason)
@@ -105,7 +105,7 @@ Here we just want to try to fix things so that one can calculate the area. We co
 ```{r}
 iceland |> 
   st_make_valid() |> 
-  mutate(reason = st_is_valid(., reason = TRUE),
+  mutate(reason = st_is_valid(geom, reason = TRUE),
          reason = lh_reasons(reason)) |> 
   st_drop_geometry() |> 
   count(reason)
@@ -117,7 +117,7 @@ OK, so there as still a few invalids. Lets give it a one more go by trying the l
 iceland |> 
   st_make_valid() |> 
   mutate(geom = lwgeom_make_valid(geom)) |> 
-  mutate(reason = st_is_valid(., reason = TRUE),
+  mutate(reason = st_is_valid(geom, reason = TRUE),
          reason = lh_reasons(reason)) |> 
   st_drop_geometry() |> 
   count(reason)
@@ -137,7 +137,7 @@ Now we can calculate the area:
 ```{r}
 iceland <- 
   iceland |> 
-  mutate(area = st_area(.)) |> 
+  mutate(area = st_area(geom)) |> 
   select(gml_id, eyjarsker, area)
 ```
 

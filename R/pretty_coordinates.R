@@ -7,7 +7,7 @@
 #' @param x A vector contain data of the format degree-minutes-second (ddmmss)
 #' @param suffix A character, e.g. N, E, W, S
 pretty_coordinates <- function(x,suffix="") {
-  x <- paste0(degrees(stringr::str_sub(x,1,2)),stringr::str_sub(x,3,4),"'",stringr::str_sub(x,5,6),suffix,sep="")
+  x <- paste0(degrees(stringr::str_sub(x,1,2)),stringr::str_sub(x,3,4),"'",stringr::str_sub(x,5),suffix,sep="")
   return(x)
 }
 
