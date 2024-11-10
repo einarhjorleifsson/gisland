@@ -78,7 +78,7 @@ gl_lmi_strandlina <- function(make_valid = TRUE) {
 gl_lmi_shoreline <- function(mainland = TRUE) {
   s <-
     "IS_50V:strandlina_flakar" |>
-    gisland::read_lmi()
+    read_lmi0()
   tmp <- tempdir()
   sf::write_sf(s, paste0(tmp, "/in.gpkg"))
   cmd <-

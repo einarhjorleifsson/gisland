@@ -21,7 +21,7 @@ library(gisland)
 What is on the menu?:
 
 ```{r}
-gl_lmi_features() |> 
+lmi_features() |> 
   select(-title) |> 
   kableExtra::kbl(full_width = F) |>
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
