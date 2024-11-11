@@ -35,7 +35,8 @@ con_lmi <- function() {
 #' @param typename The typname
 #'
 #' @return A tibble
-read_lmi0 <- function(typename) {
+#' @export
+read_lmi <- function(typename) {
   url <- con_lmi()
   url$query <- list(service = "wfs",
                     #version = "2.0.0", # optional
@@ -59,7 +60,7 @@ read_lmi0 <- function(typename) {
 #'
 gl_lmi_strandlina <- function(make_valid = TRUE) {
   "IS_50V:strandlina_flakar" |>
-    read_lmi0() |>
+    read_lmi() |>
     sf::st_cast("GEOMETRYCOLLECTION") |>
     dplyr::filter(!sf::st_is_empty(geom)) |>
     sf::st_collection_extract(type = "POLYGON") ->
@@ -78,7 +79,7 @@ gl_lmi_strandlina <- function(make_valid = TRUE) {
 gl_lmi_shoreline <- function(mainland = TRUE) {
   s <-
     "IS_50V:strandlina_flakar" |>
-    read_lmi0()
+    read_lmi()
   tmp <- tempdir()
   sf::write_sf(s, paste0(tmp, "/in.gpkg"))
   cmd <-
@@ -116,7 +117,7 @@ gl_lmi_shoreline <- function(mainland = TRUE) {
 #'
 gl_lhg_adlaegbelti <- function() {
   "LHG:adlaekt_belti_24_milur_lina" |>
-    read_lmi0() |>
+    read_lmi() |>
     sf::st_cast(to = "MULTILINESTRING") |>
     sf::st_cast(to = "LINESTRING", warn = FALSE)
 }
@@ -128,7 +129,7 @@ gl_lhg_adlaegbelti <- function() {
 #'
 gl_lhg_dypislinur <- function() {
   "LHG:dypislinur" |>
-    read_lmi0() |>
+    read_lmi() |>
     sf::st_cast(to = "MULTILINESTRING") |>
     sf::st_cast(to = "LINESTRING", warn = FALSE)
 }
@@ -140,7 +141,7 @@ gl_lhg_dypislinur <- function() {
 #'
 gl_lhg_eez <- function() {
   "LHG:efnahagslogsaga_lina" |>
-    read_lmi0() |>
+    read_lmi() |>
     sf::st_cast(to = "MULTILINESTRING") |>
     sf::st_cast(to = "LINESTRING", warn = FALSE)
 }
@@ -152,7 +153,7 @@ gl_lhg_eez <- function() {
 #'
 gl_lhg_grunnlina <- function() {
   "LHG:grunnlina" |>
-    read_lmi0() |>
+    read_lmi() |>
     sf::st_cast(to = "MULTILINESTRING") |>
     sf::st_cast(to = "LINESTRING", warn = FALSE)
 }
@@ -164,7 +165,7 @@ gl_lhg_grunnlina <- function() {
 #'
 gl_lhg_grunnpunktar <- function() {
   "LHG:grunnlina_punktar" |>
-    read_lmi0()
+    read_lmi()
 }
 
 
@@ -175,7 +176,7 @@ gl_lhg_grunnpunktar <- function() {
 #'
 gl_lhg_landhelgi <- function() {
   "LHG:landhelgi_12_milur_lina" |>
-    read_lmi0() |>
+    read_lmi() |>
     sf::st_cast(to = "MULTICURVE") |>
     sf::st_cast(to = "MULTILINESTRING") |>
     sf::st_cast(to = "LINESTRING", warn = FALSE)
@@ -189,7 +190,7 @@ gl_lhg_landhelgi <- function() {
 #' @export
 gl_fs_adrar_reglugerdir <- function() {
   "fiskistofa:adrar_reglugerdir" |>
-    read_lmi0()
+    read_lmi()
 }
 
 #' Fiskistofa - get efnistökuleyfi
@@ -198,7 +199,7 @@ gl_fs_adrar_reglugerdir <- function() {
 #' @export
 gl_fs_efnistokuleyfi <- function() {
   "fiskistofa:efnistokuleyfi" |>
-    read_lmi0()
+    read_lmi()
 }
 #' Fiskistofa - get framkvæmdarleyfi
 #'
@@ -206,7 +207,7 @@ gl_fs_efnistokuleyfi <- function() {
 #' @export
 gl_fs_framkvaemdaleyfi_igildi <- function() {
   "fiskistofa:framkvaemdaleyfi_igildi" |>
-    read_lmi0()
+    read_lmi()
 }
 
 #' Fiskistofa - get framkvæmdarleyfi
@@ -215,7 +216,7 @@ gl_fs_framkvaemdaleyfi_igildi <- function() {
 #' @export
 gl_fs_framkvaemdaleyfi_ogild <- function() {
   "fiskistofa:framkvaemdaleyfi_ogild" |>
-    read_lmi0()
+    read_lmi()
 }
 
 #' Fiskistofa - get dragnótarsvæði
@@ -224,7 +225,7 @@ gl_fs_framkvaemdaleyfi_ogild <- function() {
 #' @export
 gl_fs_virk_dragnotaveidisvaedi <- function() {
   "fiskistofa:virk_dragnotaveidisvaedi" |>
-    read_lmi0()
+    read_lmi()
 }
 
 #' Fiskistofa - get grásleppulokanir
@@ -233,12 +234,12 @@ gl_fs_virk_dragnotaveidisvaedi <- function() {
 #' @export
 gl_fs_virk_grasleppulokanir <- function() {
   "fiskistofa:virk_grasleppulokanir" |>
-    read_lmi0()
+    read_lmi()
 }
 
 gl_fs_virk_hrygningarsvaedi <- function() {
   "fiskistofa:virk_hrygningarsvaedi" |>
-    read_lmi0()
+    read_lmi()
 }
 
 #' Fiskistofa - get humarveiðisvæði
@@ -247,7 +248,7 @@ gl_fs_virk_hrygningarsvaedi <- function() {
 #' @export
 gl_fs_virk_humarveidisvaedi  <- function() {
   "fiskistofa:virk_humarveidisvaedi" |>
-    read_lmi0()
+    read_lmi()
 }
 
 #' Fiskistofa - get reglugerði
@@ -256,7 +257,7 @@ gl_fs_virk_humarveidisvaedi  <- function() {
 #' @export
 gl_fs_virkar_reglugerdir <- function() {
   "fiskistofa:virkar_reglugerdir" |>
-    read_lmi0()
+    read_lmi()
 }
 
 #' Fiskistofa - get skyndilokanir
@@ -265,7 +266,7 @@ gl_fs_virkar_reglugerdir <- function() {
 #' @export
 gl_fs_virkar_skyndilokanir <- function() {
   "fiskistofa:virkar_skyndilokanir" |>
-    read_lmi0()
+    read_lmi()
 }
 
 # Orkustofnun ------------------------------------------------------------------
@@ -277,7 +278,7 @@ gl_fs_virkar_skyndilokanir <- function() {
 gl_os_leyfi <- function() {
   d <-
     "orkustofnun:gisleyfiview_ls" |>
-    read_lmi0() |>
+    read_lmi() |>
     sf::st_cast("GEOMETRYCOLLECTION") |>
     sf::st_cast("POLYGON")
 }
