@@ -271,14 +271,22 @@ gl_fs_virkar_skyndilokanir <- function() {
 
 # Orkustofnun ------------------------------------------------------------------
 
-#' Orkustofnun: leyfi
+#' Orkustofnun: leyfi á hafsbotni
 #'
 #' @return An sf object
 #' @export
 gl_os_leyfi <- function() {
-  d <-
-    "orkustofnun:gisleyfiview_ls" |>
+  tmpfile <- tempfile(fileext = ".gpkg")
+  tmpfile2 <- tempfile(fileext = ".gpkg")
+  "orkustofnun:gisleyfiview_ls" |>
     read_lmi() |>
-    sf::st_cast("GEOMETRYCOLLECTION") |>
-    sf::st_cast("POLYGON")
+    dplyr::mutate(landsjor = stringr::str_trim(landsjor),
+           utgefid = lubridate::dmy(utgefid),
+           gildir_fra = lubridate::dmy(gildir_fra),
+           gildir_til = lubridate::dmy(gildir_til)) |>
+    dplyr::filter(landsjor == "Á hafsbotni") |>
+    sf::write_sf(tmpfile)
+  gdalUtilities::ogr2ogr(tmpfile, tmpfile2, explodecollections = T, nlt = 'CONVERT_TO_LINEAR')
+  sf::read_sf(tmpfile2) |>
+    sf::st_make_valid()
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/wfs_lmi.R
 \name{gl_os_leyfi}
 \alias{gl_os_leyfi}
-\title{Orkustofnun: leyfi}
+\title{Orkustofnun: leyfi á hafsbotni}
 \usage{
 gl_os_leyfi()
 }
@@ -10,5 +10,5 @@ gl_os_leyfi()
 An sf object
 }
 \description{
-Orkustofnun: leyfi
+Orkustofnun: leyfi á hafsbotni
 }
