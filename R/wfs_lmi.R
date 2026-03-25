@@ -58,21 +58,19 @@ read_lmi <- function(typename) {
 #' @return An sf object
 #' @export
 #'
+
 gl_lmi_strandlina <- function(make_valid = TRUE) {
-  "IS_50V:strandlina_flakar" |>
-    read_lmi() |>
+  url <- "https://gis.lmi.is/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=IS_50V:strandlina_flakar&outputFormat=application/json"
+  d <- sf::st_read(url) |>
     sf::st_cast("GEOMETRYCOLLECTION") |>
-    dplyr::filter(!sf::st_is_empty(geom)) |>
-    sf::st_collection_extract(type = "POLYGON") ->
-    d
-  if(make_valid) {
-    d |>
-      sf::st_make_valid() |>
-      dplyr::mutate(geom = lwgeom::lwgeom_make_valid(geom)) ->
-      d
+    dplyr::filter(!sf::st_is_empty(geometry)) |>
+    sf::st_collection_extract(type = "POLYGON")
+  if (make_valid) {
+    d <- sf::st_make_valid(d)
   }
   return(d)
 }
+
 
 
 # Safer way than read_shorline, at least wrt valid geometries
